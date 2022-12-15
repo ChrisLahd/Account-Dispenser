@@ -15,8 +15,8 @@ class Whitelister(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        #await self.ExpCheck()
         print("Whitelister cog loaded.")
+        await self.ExpCheck()
 
     async def ExpirationDaemon(self):
         idFile = open("ClientIDs.txt", "r").readlines()
@@ -73,8 +73,8 @@ class Whitelister(commands.Cog):
 
         for line in cidFileCheck:
             line = line.strip("\n")
-            line = line[0].strip("=")
-            if line == cid:
+            line = line.split("=")
+            if line[0] == cid:
                 await ctx.send(f"User ID {cid} already whitelited.")
                 return
             else:
@@ -107,8 +107,8 @@ class Whitelister(commands.Cog):
         for line in cidFileCheck:
 
             line = line.split("\n")[0]
-            line = line[0].strip(":")
-            if line == cid:
+            line = line[0].strip("=")
+            if line[0] == cid:
                 pass
             else:
                 cidFile.write(f"{line}\n")
@@ -134,7 +134,8 @@ class Whitelister(commands.Cog):
 
         for line in cidFileCheck:
             line = line.strip("\n")
-            if line == cid:
+            line = line.strip("=")
+            if line[0] == cid:
                 await ctx.send(f"User ID {cid} is already an admin.")
                 return
             else:
@@ -167,7 +168,8 @@ class Whitelister(commands.Cog):
         for line in cidFileCheck:
 
             line = line.split("\n")[0]
-            if line == cid:
+            line = line.split("=")
+            if line[0] == cid:
                 pass
             else:
                 cidFile.write(f"{line}\n")

@@ -80,7 +80,7 @@ class Generator(commands.Cog):
             return
 
         if len(list(accountType)) == 0 or str(list(accountType)[0].lower()) not in str(self.accountTypes).lower():
-            embed = discord.Embed(title="Account Generation", description=f"Use {prefix}generate [Account type] to generate an account and have it sent to your DM's.", color=0xe67e22, timestamp=datetime.datetime.utcnow())
+            embed = discord.Embed(title="Account Generation", description=f"Use {prefix}generate [Account type] to generate an account. We reccommend you use this in your DM's", color=0xe67e22, timestamp=datetime.datetime.utcnow())
             await ctx.send(embed = embed)
             Generator.generate.reset_cooldown(ctx)
         
