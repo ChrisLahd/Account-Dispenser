@@ -24,9 +24,9 @@ async def unload(ctx, cog):
     await bot.unload_extension(f"Cogs.{cog}")
 
 @bot.command()
-async def reload(ctx, cog):
+async def reload(ctx, *cog):
 
-    if cog == "all":
+    if len(list(cog)) == 0:
         for filename in os.listdir("./Cogs"):
             if filename.endswith(".py"):
                await bot.unload_extension(f"Cogs.{filename[:-3]}")

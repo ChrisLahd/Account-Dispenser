@@ -12,7 +12,8 @@ class Admin(commands.Cog):
             "addUser": "Adds a user to the whitelist allowing them to use the bot",
             "removeUser": "Removes a users access to the bot",
             "addAdmin": "Makes users Admins (Use this carefully)",
-            "removeAdmin": "Removes users from being Admins"
+            "removeAdmin": "Removes users from being Admins",
+            "help restock": "Displays how to restock accounts"
         }
 
         self.AdmCommandKeyList = []
@@ -40,9 +41,16 @@ class Admin(commands.Cog):
                 self.canuse = True
                 return
 
+    def fileSizeConversion(self, size):
+      for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+          if size < 1024.0:
+              return "%3.1f %s" % (size, x)
+          size /= 1024.0
+
+      return size
+
     @commands.command(aliases=["admin"])
     async def Admin(self, ctx):
-
         isInline = False
 
         await self.IDCheck(ctx.author.id)
@@ -70,10 +78,8 @@ class Admin(commands.Cog):
             return
 
         await discord.Attachment.save(file, f"Accounts/{file.filename}")
-
         newAccs = len(open(f"Accounts/{file.filename}", "r").readlines())
-
-        await ctx.send(f"Restocked {file.filename[:-4]} with {newAccs} accounts")
+        await ctx.send(f"Restocked {file.filename[:-4]} with {newAccs} accounts ({self.fileSizeConversion(file.size)})")
     
 async def setup(bot):
     await bot.add_cog(Admin(bot))

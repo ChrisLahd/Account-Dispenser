@@ -9,10 +9,29 @@ class Generator(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.accountTypesFree = []
+        self.accountTypeStockFree = []
         self.accountTypes = []
         self.accountTypeStock = []
-
+        self.allAccTypes = []
         self.canuse = False
+        self.canuseFree = True
+
+        for i in os.listdir("./AccountsFree"):
+            if i.endswith("free.txt"):
+                self.allAccTypes.append(i[:-4])
+
+        for i in os.listdir("./Accounts"):
+            if i.endswith(".txt"):
+                self.allAccTypes.append(i[:-4])
+
+        for i in os.listdir("./AccountsFree"):
+            if i.endswith("free.txt"):
+                self.accountTypesFree.append(i[:-4])
+
+        for i in range(len(self.accountTypesFree)):
+            x = len(open(f"./AccountsFree/{self.accountTypesFree[i]}.txt", "r").readlines())
+            self.accountTypeStockFree.append(f"{x}")
 
         for i in os.listdir("./Accounts"):
             if i.endswith(".txt"):
@@ -21,11 +40,24 @@ class Generator(commands.Cog):
         for i in range(len(self.accountTypes)):
             x = len(open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines())
             self.accountTypeStock.append(f"{x}")
+
+        #for i in self.accountTypes and self.accountTypesFree:
+        #    self.allAccTypes.append(i)
     
     async def updateAccounts(self):
+        self.accountTypesFree.clear()
+        self.accountTypeStockFree.clear()
         self.accountTypes.clear()
         self.accountTypeStock.clear()
 
+        for i in os.listdir("./AccountsFree"):
+            if i.endswith("free.txt"):
+                self.accountTypesFree.append(i[:-4])
+
+        for i in range(len(self.accountTypesFree)):
+            x = len(open(f"./AccountsFree/{self.accountTypesFree[i]}.txt", "r").readlines())
+            self.accountTypeStockFree.append(f"{x}")
+
         for i in os.listdir("./Accounts"):
             if i.endswith(".txt"):
                 self.accountTypes.append(i[:-4])
@@ -33,6 +65,7 @@ class Generator(commands.Cog):
         for i in range(len(self.accountTypes)):
             x = len(open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines())
             self.accountTypeStock.append(f"{x}")
+            
 
     async def IDCheck(self, uid):
         idFile = open("ClientIDs.txt", "r").readlines()
@@ -50,20 +83,28 @@ class Generator(commands.Cog):
     async def on_ready(self):
         print("Generator cog loaded.")
 
-    @commands.command(aliases=["Accounts"])
+    @commands.command(aliases=["Accounts", "accs"])
     async def accounts(self, ctx):
         isInline = False
 
+        await self.IDCheck(ctx.author.id)
         await self.updateAccounts()
+
         embed = discord.Embed(title="Accounts", description="Our current accounts aswell as the stock", colour=0xe67e22, timestamp=datetime.datetime.utcnow())
 
-        for i in range(len(self.accountTypes)):
+        if self.canuse:
+            for i in range(len(self.accountTypes)):
+                if i >= 4:
+                    isInline = True
+
+                embed.add_field(name=f"Account Type: {self.accountTypes[i]}", value=f"Stock: {self.accountTypeStock[i]}", inline=isInline)
+
+
+        for i in range(len(self.accountTypesFree)):
             if i >= 4:
                 isInline = True
-            else:
-                isInline = False
 
-            embed.add_field(name=f"Account Type: {self.accountTypes[i]}", value=f"Stock: {self.accountTypeStock[i]}", inline=isInline)
+            embed.add_field(name=f"Account Type: {self.accountTypesFree[i]}", value=f"Stock: {self.accountTypeStockFree[i]}", inline=isInline)
 
         await ctx.send(embed = embed)
 
@@ -73,26 +114,32 @@ class Generator(commands.Cog):
         iloopcount = -1
 
         await self.IDCheck(ctx.author.id)
+        if len(list(accountType)) == 0:
+            embed = discord.Embed(title="Account Generation", description=f"Use {prefix}generate [Account type] to generate an account. We reccommend you use this in your DM's", color=0xe67e22, timestamp=datetime.datetime.utcnow())
+            await ctx.send(embed = embed)
+            Generator.generate.reset_cooldown(ctx)
 
         if self.canuse == False:
             await ctx.send("You do not have permission to use this feature.")
             return
 
-        if len(list(accountType)) == 0 or str(list(accountType)[0].lower()) not in str(self.accountTypes).lower():
-            embed = discord.Embed(title="Account Generation", description=f"Use {prefix}generate [Account type] to generate an account. We reccommend you use this in your DM's", color=0xe67e22, timestamp=datetime.datetime.utcnow())
-            await ctx.send(embed = embed)
-            Generator.generate.reset_cooldown(ctx)
-        
         else:
 
             accountType = str(list(accountType)[0])
+            
+            if str(accountType).lower() in str(self.accountTypes).lower():
+                AccToDispense = self.accountTypes
+                path = "./Accounts/"
+            else:
+                AccToDispense = self.accountTypesFree
+                path = "./AccountsFree/"
 
-            for i in self.accountTypes:
+            for i in AccToDispense:
                 iloopcount += 1
 
                 if str(i).lower() == accountType.lower():
-                    Accounts = open(f"./Accounts/{self.accountTypes[iloopcount]}.txt", "r").readlines()
-                    AccountsWrite = open(f"./Accounts/{self.accountTypes[iloopcount]}.txt", "w")
+                    Accounts = open(f"{path}{AccToDispense[iloopcount]}.txt", "r").readlines()
+                    AccountsWrite = open(f"{path}{AccToDispense[iloopcount]}.txt", "w")
                     
                     if str(Accounts) == "[]":
                         await ctx.send(f"Sorry, our {accountType} accounts are out of stock.")
