@@ -16,9 +16,9 @@ class Whitelister(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("Whitelister cog loaded.")
-        await self.ExpCheck()
+        await self.ExpiryDaemon()
 
-    async def ExpirationDaemon(self):
+    async def ExpiryCheck(self):
         idFile = open("ClientIDs.txt", "r").readlines()
         idFileToWrite = open("ClientIDs.txt", "w")
 
@@ -37,7 +37,7 @@ class Whitelister(commands.Cog):
             else:
                 idFileToWrite.write(f"{lineToWrite}\n")
     
-    async def ExpCheck(self):
+    async def ExpiryDaemon(self):
         await self.ExpirationDaemon()
         await asyncio.sleep(5)
         await self.ExpCheck()
