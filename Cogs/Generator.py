@@ -33,7 +33,7 @@ class Generator(commands.Cog):
         for i in range(len(self.accountTypes)):
             x = len(open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines())
             self.accountTypeStock.append(f"{x}")
-        
+
     async def IDCheck(self, uid):
         idFile = open("ClientIDs.txt", "r").readlines()
 
@@ -72,7 +72,6 @@ class Generator(commands.Cog):
     async def generate(self, ctx, *accountType: str):
         iloopcount = -1
 
-        print(len(list(accountType)))
         await self.IDCheck(ctx.author.id)
 
         if self.canuse == False:
@@ -88,7 +87,6 @@ class Generator(commands.Cog):
 
             accountType = str(list(accountType)[0])
 
-            print(accountType)
             for i in self.accountTypes:
                 iloopcount += 1
 

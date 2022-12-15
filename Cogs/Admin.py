@@ -1,8 +1,7 @@
 from discord.ext import commands
 import discord
 import datetime
-import asyncio
-
+import os
 
 class Admin(commands.Cog):
 
@@ -22,6 +21,9 @@ class Admin(commands.Cog):
         for i in range(len(self.admincommands)):
             self.AdmCommandKeyList.append(list(self.admincommands)[i])
             self.AdmCommandValList.append(list(self.admincommands.values())[i])
+
+        self.ogFile = []
+        self.stockFile = []
             
     @commands.Cog.listener()
     async def on_ready(self):
@@ -60,6 +62,18 @@ class Admin(commands.Cog):
                 embed.add_field(name=f"{self.AdmCommandKeyList[i]}", value=f"{self.AdmCommandValList[i]}", inline=isInline)
 
             await ctx.send(embed = embed)
+
+    @commands.command()
+    async def restock(self, ctx, file: discord.Attachment):
+        if file.content_type != "text/plain; charset=utf-8":
+            await ctx.send("Incorrect file type.")
+            return
+
+        await discord.Attachment.save(file, f"Accounts/{file.filename}")
+
+        newAccs = len(open(f"Accounts/{file.filename}", "r").readlines())
+
+        await ctx.send(f"Restocked {file.filename[:-4]} with {newAccs} accounts")
     
 async def setup(bot):
     await bot.add_cog(Admin(bot))
