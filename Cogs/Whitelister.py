@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import datetime
+import asyncio
 
 prefix = open("prefix.txt", "r").read()
 
@@ -10,23 +11,50 @@ class Whitelister(commands.Cog):
         self.bot = bot
         self.ids = []
         self.canuse = False
+        self.date = datetime.datetime.today().strftime("%Y-%m-%d-%H:%M")
 
     @commands.Cog.listener()
     async def on_ready(self):
+        #await self.ExpCheck()
         print("Whitelister cog loaded.")
+
+    async def ExpirationDaemon(self):
+        idFile = open("ClientIDs.txt", "r").readlines()
+        idFileToWrite = open("ClientIDs.txt", "w")
+
+        for line in idFile:
+            line = line.split("\n")
+            lineToWrite = line[0]
+            line = line[0].split("=")
+            
+            dateCheck = line[1].split("-")
+            dateCheckHour = dateCheck[3].split(":")
+            clientDate = datetime.datetime.today().replace(year=int(dateCheck[0]), month=int(dateCheck[1]), day=int(dateCheck[2]), hour=int(dateCheckHour[0]), minute=int(dateCheckHour[1]))
+            ExpirationDate = clientDate + datetime.timedelta(days=14)
+            
+            if ExpirationDate < datetime.datetime.now():
+                pass
+            else:
+                idFileToWrite.write(f"{lineToWrite}\n")
+    
+    async def ExpCheck(self):
+        await self.ExpirationDaemon()
+        await asyncio.sleep(5)
+        await self.ExpCheck()
 
     async def IDCheck(self, uid):
         idFile = open("AdminIDs.txt", "r").readlines()
 
         for line in idFile:
             line = line.split("\n")
+            line = line[0].split(":")
             if line[0] != str(uid):
                 self.canuse = False
             else:
                 self.canuse = True
                 return
 
-    @commands.command()
+    @commands.command(aliases=["adduser"])
     async def addUser(self, ctx, *cid):
         await self.IDCheck(ctx.author.id)
 
@@ -40,10 +68,12 @@ class Whitelister(commands.Cog):
             await ctx.send(embed = embed)
             return
 
+        cid = list(cid)[0]
         cidFileCheck = open("ClientIDs.txt", "r").readlines()
 
         for line in cidFileCheck:
             line = line.strip("\n")
+            line = line[0].strip("=")
             if line == cid:
                 await ctx.send(f"User ID {cid} already whitelited.")
                 return
@@ -51,12 +81,12 @@ class Whitelister(commands.Cog):
                 pass
 
         cidFile = open("ClientIDs.txt", "a")
-        cidFile.write(f"{cid}\n")
+        cidFile.write(f"{cid}={self.date}\n")
         cidFile.close()
 
         await ctx.send(f"User ID {cid} whitelisted!")
     
-    @commands.command()
+    @commands.command(aliases=["removeuser"])
     async def removeUser(self, ctx, *cid):
         await self.IDCheck(ctx.author.id)
 
@@ -70,12 +100,14 @@ class Whitelister(commands.Cog):
             await ctx.send(embed = embed)
             return
 
+        cid = list(cid)[0]
         cidFileCheck = open("ClientIDs.txt", "r").readlines()
         cidFile = open("ClientIDs.txt", "w")
 
         for line in cidFileCheck:
 
             line = line.split("\n")[0]
+            line = line[0].strip(":")
             if line == cid:
                 pass
             else:
@@ -83,7 +115,7 @@ class Whitelister(commands.Cog):
 
         await ctx.send(f"User ID {cid} un-whitelisted!")
 
-    @commands.command()
+    @commands.command(aliases=["addadmin"])
     async def addAdmin(self, ctx, *cid):
         await self.IDCheck(ctx.author.id)
 
@@ -97,6 +129,7 @@ class Whitelister(commands.Cog):
             await ctx.send(embed = embed)
             return
 
+        cid = list(cid)[0]
         cidFileCheck = open("AdminIDs.txt", "r").readlines()
 
         for line in cidFileCheck:
@@ -113,7 +146,7 @@ class Whitelister(commands.Cog):
 
         await ctx.send(f"User ID {cid} is now an admin!")
 
-    @commands.command()
+    @commands.command(aliases=["removeadmin"])
     async def removeAdmin(self, ctx, *cid):
         await self.IDCheck(ctx.author.id)
 
@@ -127,6 +160,7 @@ class Whitelister(commands.Cog):
             await ctx.send(embed = embed)
             return
 
+        cid = list(cid)[0]
         cidFileCheck = open("AdminIDs.txt", "r").readlines()
         cidFile = open("AdminIDs.txt", "w")
 

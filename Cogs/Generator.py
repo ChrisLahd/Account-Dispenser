@@ -39,6 +39,7 @@ class Generator(commands.Cog):
 
         for line in idFile:
             line = line.split("\n")
+            line = line[0].split("=")
             if line[0] != str(uid):
                 self.canuse = False
             else:
@@ -71,6 +72,7 @@ class Generator(commands.Cog):
     async def generate(self, ctx, *accountType: str):
         iloopcount = -1
 
+        print(len(list(accountType)))
         await self.IDCheck(ctx.author.id)
 
         if self.canuse == False:
@@ -85,6 +87,8 @@ class Generator(commands.Cog):
         else:
 
             accountType = str(list(accountType)[0])
+
+            print(accountType)
             for i in self.accountTypes:
                 iloopcount += 1
 
