@@ -48,7 +48,7 @@ class General(commands.Cog):
         isInline = False
 
         embed = discord.Embed(title="Account Dispenser", description="How to use the bot", colour=0xe67e22, timestamp=datetime.datetime.utcnow())
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1052059625752629258/1052090243483975710/Illustration.png")
+        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1049934047444484156/1052804133641539584/Illustration.png")
         
         for i in range(len(self.CommandKeyList)):
        
@@ -65,7 +65,7 @@ class General(commands.Cog):
         isInline = False
 
         embed = discord.Embed(title="Account Menu", description="Account commands to help you with using the unique features of the bot.", color=0xe67e22, timestamp=datetime.datetime.utcnow())
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1052059625752629258/1052090243483975710/Illustration.png")
+        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1049934047444484156/1052804133641539584/Illustration.png")
 
         for i in range(len(self.AccCmdKeyList)):
        

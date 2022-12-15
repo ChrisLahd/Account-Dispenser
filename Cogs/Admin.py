@@ -53,7 +53,7 @@ class Admin(commands.Cog):
         else:
         
             embed = discord.Embed(title="Admin Menu", description="Admin commands to help you manage the bot", color=0xe67e22, timestamp=datetime.datetime.utcnow())
-
+            embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/1049934047444484156/1052804133641539584/Illustration.png")
             for i in range(len(self.AdmCommandKeyList)):
             
                 if i >= 4:
