@@ -96,7 +96,6 @@ class Generator(commands.Cog):
     async def generate(self, ctx, *accountType: str):
         iloopcount = -1
 
-        print(self.allAccTypes)
         await self.IDCheck(ctx.author.id)
         if len(list(accountType)) == 0:
             embed = discord.Embed(title="Account Generation", description=f"Use {prefix}generate [Account type] to generate an account. We reccommend you use this in your DM's", color=0xe67e22, timestamp=datetime.datetime.utcnow())
