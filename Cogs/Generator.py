@@ -18,21 +18,6 @@ class Generator(commands.Cog):
         self.canuse = False
         self.canuseFree = True
 
-        for i in os.listdir("./AccountsFree"):
-            if i.endswith("free.txt"):
-                self.accountTypesFree.append(i[:-4])
-
-        for i in range(len(self.accountTypesFree)):
-            x = len(open(f"./AccountsFree/{self.accountTypesFree[i]}.txt", "r").readlines())
-            self.accountTypeStockFree.append(f"{x}")
-
-        for i in os.listdir("./Accounts"):
-            if i.endswith(".txt"):
-                self.accountTypes.append(i[:-4])
-
-        for i in range(len(self.accountTypes)):
-            x = len(open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines())
-            self.accountTypeStock.append(f"{x}")
 
     @commands.Cog.listener()
     async def on_ready(self):
