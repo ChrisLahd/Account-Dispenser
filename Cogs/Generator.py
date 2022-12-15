@@ -71,6 +71,7 @@ class Generator(commands.Cog):
     async def accounts(self, ctx):
         isInline = False
 
+        await self.updateAccounts()
         await self.IDCheck(ctx.author.id)
 
         embed = discord.Embed(title="Accounts", description="Our current accounts aswell as the stock", colour=0xe67e22, timestamp=datetime.datetime.utcnow())
