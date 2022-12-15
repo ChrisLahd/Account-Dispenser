@@ -2,3 +2,4 @@ Accounts/*
 Cogs/__pycache__
 ClientIDs.txt
 AdminIDs.txt
+*.pyc
