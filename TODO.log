@@ -1,0 +1,10 @@
+Things I need todo.
+
+- Make the "addUser" command a category for cleaner code.
+I might even be able to mash it into one command using string checking.
+
+- Make the "addUser" command log the admin who adds the ClientID for further
+moderation and easy access for logs.
+
+- Make the "Generator" command accept users who don't have a whitelisted
+ClientID so they can generate free accounts.
