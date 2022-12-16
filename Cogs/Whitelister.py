@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 import discord
 import datetime
 import asyncio
@@ -16,8 +16,9 @@ class Whitelister(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("Whitelister cog loaded.")
-        await self.ExpiryDaemon()
+        self.ExpiryCheck.start()
 
+    @tasks.loop(seconds=10)
     async def ExpiryCheck(self):
         idFile = open("ClientIDs.txt", "r").readlines()
         idFileToWrite = open("ClientIDs.txt", "w")
@@ -37,11 +38,6 @@ class Whitelister(commands.Cog):
             else:
                 idFileToWrite.write(f"{lineToWrite}\n")
     
-    async def ExpiryDaemon(self):
-        await self.ExpirationDaemon()
-        await asyncio.sleep(5)
-        await self.ExpCheck()
-
     async def IDCheck(self, uid):
         idFile = open("AdminIDs.txt", "r").readlines()
 
