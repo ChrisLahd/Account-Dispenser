@@ -25,7 +25,6 @@ async def unload(ctx, cog):
 
 @bot.command()
 async def reload(ctx, *cog):
-
     if len(list(cog)) == 0:
         for filename in os.listdir("./Cogs"):
             if filename.endswith(".py"):
