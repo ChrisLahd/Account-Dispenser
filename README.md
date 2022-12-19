@@ -1,2 +1,2 @@
-# Account-Dispenser
-Account Dispensery Discord Bot
+# Account Dispenser
+ Account Dispensery Discord Bot

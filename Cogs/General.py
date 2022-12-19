@@ -43,7 +43,7 @@ class General(commands.Cog):
         await self.bot.change_presence(status=discord.Status.idle, activity=discord.Game(name=f"{prefix}help"), )
 
     async def IDCheck(self, uid):
-        idFile = open("AdminIDs.txt", "r").readlines()
+        idFile = open("./IDs/AdminIDs.txt", "r").readlines()
 
         for line in idFile:
             line = line.split("\n")

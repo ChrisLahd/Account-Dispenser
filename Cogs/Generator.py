@@ -60,7 +60,7 @@ class Generator(commands.Cog):
             self.allAccTypesLower.append(str(i).lower())
 
     async def IDCheck(self, uid) -> None:
-        idFile = open("ClientIDs.txt", "r").readlines()
+        idFile = open("./IDs/ClientIDs.txt", "r").readlines()
 
         for line in idFile:
             line = line.split("\n")

@@ -20,8 +20,8 @@ class Whitelister(commands.Cog):
 
     @tasks.loop(seconds=5)
     async def ExpiryCheck(self):
-        idFile = open("ClientIDs.txt", "r").readlines()
-        idFileToWrite = open("ClientIDs.txt", "w")
+        idFile = open("./IDs/ClientIDs.txt", "r").readlines()
+        idFileToWrite = open("./IDs/ClientIDs.txt", "w")
 
         for line in idFile:
             line = line.split("\n")
@@ -39,7 +39,7 @@ class Whitelister(commands.Cog):
                 idFileToWrite.write(f"{lineToWrite}\n")
     
     async def IDCheck(self, uid):
-        idFile = open("AdminIDs.txt", "r").readlines()
+        idFile = open("./IDs/AdminIDs.txt", "r").readlines()
 
         for line in idFile:
             line = line.split("\n")
@@ -68,7 +68,8 @@ class Whitelister(commands.Cog):
             args.append("14")
         
         cid = args[0]
-        cidFileCheck = open("ClientIDs.txt", "r").readlines()
+        cidFileCheck = open("./IDs/ClientIDs.txt", "r").readlines()
+        cidFile = open("./IDs/ClientIDs.txt", "a")
 
         for line in cidFileCheck:
             line = line.strip("\n")
@@ -79,7 +80,6 @@ class Whitelister(commands.Cog):
             else:
                 pass
         
-        cidFile = open("ClientIDs.txt", "a")
         cidFile.write(f"{cid}={self.date}={args[1]}\n")
         cidFile.close()
 
@@ -100,8 +100,8 @@ class Whitelister(commands.Cog):
             return
 
         cid = list(cid)[0]
-        cidFileCheck = open("ClientIDs.txt", "r").readlines()
-        cidFile = open("ClientIDs.txt", "w")
+        cidFileCheck = open("./IDs/ClientIDs.txt", "r").readlines()
+        cidFile = open("./IDs/ClientIDs.txt", "w")
 
         for line in cidFileCheck:
 
@@ -129,7 +129,8 @@ class Whitelister(commands.Cog):
             return
 
         cid = list(cid)[0]
-        cidFileCheck = open("AdminIDs.txt", "r").readlines()
+        cidFileCheck = open("./IDs/AdminIDs.txt", "r").readlines()
+        cidFile = open("./IDs/AdminIDs.txt", "a")
 
         for line in cidFileCheck:
             line = line.strip("\n")
@@ -140,7 +141,6 @@ class Whitelister(commands.Cog):
             else:
                 pass
 
-        cidFile = open("AdminIDs.txt", "a")
         cidFile.write(f"{cid}\n")
         cidFile.close()
 
@@ -161,8 +161,8 @@ class Whitelister(commands.Cog):
             return
 
         cid = list(cid)[0]
-        cidFileCheck = open("AdminIDs.txt", "r").readlines()
-        cidFile = open("AdminIDs.txt", "w")
+        cidFileCheck = open("./IDs/AdminIDs.txt", "r").readlines()
+        cidFile = open("./IDs/AdminIDs.txt", "w")
 
         for line in cidFileCheck:
 
