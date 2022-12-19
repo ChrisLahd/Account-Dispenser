@@ -4,6 +4,10 @@
 <img height=300 src="Other Files/Illustration.png" alt="Account Dispenser">
 </p>
 
+---
+[![Python application](https://github.com/ChrisLahd/Account-Dispenser/actions/workflows/python-app.yml/badge.svg)](https://github.com/ChrisLahd/Account-Dispenser/actions/workflows/python-app.yml)
+---
+
 ## What does it do?
 
 This discord bot dispenses account information using commands that read files in the ```Accounts``` and ```AccountsFree``` Folder.
