@@ -37,12 +37,10 @@ class General(commands.Cog):
             self.AccCmdKeyList.append(list(self.accountmenucommands)[i])
             self.AccCmdValList.append(list(self.accountmenucommands.values())[i])
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         print("General cog loaded.")
         await self.bot.change_presence(status=discord.Status.idle, activity=discord.Game(name=f"{prefix}help"), )
-
 
     async def IDCheck(self, uid):
         idFile = open("AdminIDs.txt", "r").readlines()
@@ -98,7 +96,7 @@ class General(commands.Cog):
         
             embed = discord.Embed(title="Account Restocking", description="How to restock accounts", color=0xe67e22, timestamp=datetime.datetime.utcnow())
             embed.set_image(url="https://cdn.discordapp.com/attachments/1049934047444484156/1052811074350628914/image.png")
-            embed.add_field(name="Usage", value="Use the restock command and make sure to have a txt file attatched with the\nsame name as the account type you are restocking.\n\nPlease keep in mind, doing this will override all current accounts in the\ntext file with the name of the text file you are restocking with.\n\nThere is built in dupe detection so you don\'t have to worry\nabout filtering your text files.")
+            embed.add_field(name="Usage", value="Use the restock command and make sure to have a txt file attatched with the\nsame name as the account type you are restocking.\n\nPlease keep in mind, doing this will override all current accounts in the\ntext file with the name of the text file you are restocking with.\nThere is built in dupe detection so you don\'t have to worry\nabout filtering your text files.")
 
             await ctx.send(embed = embed)
 
@@ -109,7 +107,6 @@ class General(commands.Cog):
         message = await ctx.send("Serving throw...")
         ping = (time.monotonic() - before) * 1000
         await message.edit(content=f"Pong! :ping_pong:  `{int(ping)}ms`")
-
 
 async def setup(bot):
     await bot.add_cog(General(bot))

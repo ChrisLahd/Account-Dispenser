@@ -19,7 +19,6 @@ class Generator(commands.Cog):
         self.canuse = False
         self.synced = False
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         print("Generator cog loaded.")
@@ -34,7 +33,6 @@ class Generator(commands.Cog):
         self.allAccTypes.clear()
         self.allAccTypesLower.clear()
         self.list_dict.clear()
-
 
         for i in os.listdir("./AccountsFree"):
             if i.endswith("free.txt"):
