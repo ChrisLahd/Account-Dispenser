@@ -35,6 +35,10 @@ async def reload(ctx, *cog):
 
 async def main():
     await loadOnStartup()
+
+    if os.environ.get("USER") == "runner":
+        exit
+
     await bot.start("MTA1MjA1MzI0MTYwNjcwOTI3OQ.G1l4Ju.Gv-c08H9Qd4SC3X7OFwEVMbEet8wJWL-JPnWcE")
 
 asyncio.run(main())
