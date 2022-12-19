@@ -1,7 +1,6 @@
 from discord.ext import commands, tasks
 import discord
 import datetime
-import asyncio
 
 prefix = open("prefix.txt", "r").read()
 
@@ -18,7 +17,7 @@ class Whitelister(commands.Cog):
         print("Whitelister cog loaded.")
         self.ExpiryCheck.start()
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(seconds=5)
     async def ExpiryCheck(self):
         idFile = open("ClientIDs.txt", "r").readlines()
         idFileToWrite = open("ClientIDs.txt", "w")
@@ -27,11 +26,11 @@ class Whitelister(commands.Cog):
             line = line.split("\n")
             lineToWrite = line[0]
             line = line[0].split("=")
-            
+
             dateCheck = line[1].split("-")
             dateCheckHour = dateCheck[3].split(":")
             clientDate = datetime.datetime.today().replace(year=int(dateCheck[0]), month=int(dateCheck[1]), day=int(dateCheck[2]), hour=int(dateCheckHour[0]), minute=int(dateCheckHour[1]))
-            ExpirationDate = clientDate + datetime.timedelta(days=14)
+            ExpirationDate = clientDate + datetime.timedelta(days=int(line[2]))
             
             if ExpirationDate < datetime.datetime.now():
                 pass
@@ -51,20 +50,23 @@ class Whitelister(commands.Cog):
                 return
 
     @commands.command(aliases=["adduser"])
-    async def addUser(self, ctx, *cid):
+    async def addUser(self, ctx, *args):
+        args = list(args)
         await self.IDCheck(ctx.author.id)
-
         if self.canuse == False:
             await ctx.send("You do not have permission to use this feature.")
             return
 
-        if len(list(cid)) == 0:
-            embed = discord.Embed(title="Adding Users", description=f"Using the addUsers command is as simple as inputting the user's Discord ID.\n{prefix}addUser [UserID]", colour=0xe67e22, timestamp=datetime.datetime.utcnow())
+        if len(args) == 0:
+            embed = discord.Embed(title="Adding Users", description=f"Using the addUsers command is as simple as inputting the user's Discord ID.\n{prefix}addUser [UserID] [(Optional) Length of whitelist (in days). Default = 14]", colour=0xe67e22, timestamp=datetime.datetime.utcnow())
             embed.set_image(url="https://cdn.discordapp.com/attachments/1052059625752629258/1052720946034782268/image.png")
             await ctx.send(embed = embed)
             return
-
-        cid = list(cid)[0]
+        
+        if len(args) == 1:
+            args.append("14")
+        
+        cid = args[0]
         cidFileCheck = open("ClientIDs.txt", "r").readlines()
 
         for line in cidFileCheck:
@@ -75,9 +77,9 @@ class Whitelister(commands.Cog):
                 return
             else:
                 pass
-
+        
         cidFile = open("ClientIDs.txt", "a")
-        cidFile.write(f"{cid}={self.date}\n")
+        cidFile.write(f"{cid}={self.date}={args[1]}\n")
         cidFile.close()
 
         await ctx.send(f"User ID {cid} whitelisted!")
