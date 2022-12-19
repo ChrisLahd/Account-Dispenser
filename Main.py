@@ -37,7 +37,7 @@ async def main():
     await loadOnStartup()
     await bot.start("MTA1MjA1MzI0MTYwNjcwOTI3OQ.G1l4Ju.Gv-c08H9Qd4SC3X7OFwEVMbEet8wJWL-JPnWcE")
 
-if os.environ.get("USER") == "runner":
+if os.environ.get("USER") == "runner": # For GitHub Workflows
     exit()
 
 asyncio.run(main())
