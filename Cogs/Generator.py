@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
 import os
 import datetime
@@ -16,14 +17,15 @@ class Generator(commands.Cog):
         self.allAccTypes = []
         self.allAccTypesLower = []
         self.list_dict = {}
-        self.list_dict_dupes = {}
         self.canuse = False
+        self.synced = False
+
 
     @commands.Cog.listener()
     async def on_ready(self):
         print("Generator cog loaded.")
         self.updateAccounts.start()
-
+    
     @tasks.loop(seconds=1)
     async def updateAccounts(self) -> None:
         self.accountTypesFree.clear()
@@ -33,6 +35,7 @@ class Generator(commands.Cog):
         self.allAccTypes.clear()
         self.allAccTypesLower.clear()
         self.list_dict.clear()
+
 
         for i in os.listdir("./AccountsFree"):
             if i.endswith("free.txt"):
@@ -52,8 +55,8 @@ class Generator(commands.Cog):
             self.list_dict[self.accountTypes[i]] = []
             x = open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines()
             for line in x:
-                    if line not in self.list_dict[f"{self.accountTypes[i]}"]:
-                        self.list_dict[self.accountTypes[i]].append(line)
+                if line not in self.list_dict[f"{self.accountTypes[i]}"]:
+                    self.list_dict[self.accountTypes[i]].append(line)
             self.accountTypeStock.append(f"{len(self.list_dict[self.accountTypes[i]])}")
 
         for i in self.allAccTypes:
@@ -74,9 +77,7 @@ class Generator(commands.Cog):
     @commands.command(aliases=["Accounts", "accs"])
     async def accounts(self, ctx):
         isInline = False
-
         await self.IDCheck(ctx.author.id)
-
         embed = discord.Embed(title="Accounts", description="Our current accounts aswell as the stock", colour=0xe67e22, timestamp=datetime.datetime.utcnow())
 
         if self.canuse:
@@ -98,7 +99,6 @@ class Generator(commands.Cog):
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def generate(self, ctx, *accountType: str):
         iloopcount = -1
-
         await self.IDCheck(ctx.author.id)
 
         if len(list(accountType)) == 0 or self.allAccTypesLower.count(str(list(accountType)[0].lower())) == 0:

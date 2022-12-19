@@ -3,7 +3,7 @@ from discord.ext import commands
 import os
 import asyncio
 
-intents = discord.Intents().all()
+intents = discord.Intents.all()
 prefix = open("prefix.txt", "r").read()
 bot = commands.Bot(command_prefix=prefix, description="Account Dispensory", intents=intents)
 
