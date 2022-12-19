@@ -15,6 +15,8 @@ class Generator(commands.Cog):
         self.accountTypeStock = []
         self.allAccTypes = []
         self.allAccTypesLower = []
+        self.list_dict = {}
+        self.list_dict_dupes = {}
         self.canuse = False
 
     @commands.Cog.listener()
@@ -30,13 +32,14 @@ class Generator(commands.Cog):
         self.accountTypeStock.clear()
         self.allAccTypes.clear()
         self.allAccTypesLower.clear()
+        self.list_dict.clear()
 
         for i in os.listdir("./AccountsFree"):
             if i.endswith("free.txt"):
                 self.accountTypesFree.append(i[:-4])
                 self.allAccTypes.append(i[:-4])
 
-        for i in range(len(self.accountTypesFree)):
+        for i in range(len(self.accountTypesFree)): # add dupe detection here
             x = len(open(f"./AccountsFree/{self.accountTypesFree[i]}.txt", "r").readlines())
             self.accountTypeStockFree.append(f"{x}")
 
@@ -46,12 +49,16 @@ class Generator(commands.Cog):
                 self.allAccTypes.append(i[:-4])
 
         for i in range(len(self.accountTypes)):
-            x = len(open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines())
-            self.accountTypeStock.append(f"{x}")
+            self.list_dict[self.accountTypes[i]] = []
+            x = open(f"./Accounts/{self.accountTypes[i]}.txt", "r").readlines()
+            for line in x:
+                    if line not in self.list_dict[f"{self.accountTypes[i]}"]:
+                        self.list_dict[self.accountTypes[i]].append(line)
+            self.accountTypeStock.append(f"{len(self.list_dict[self.accountTypes[i]])}")
 
         for i in self.allAccTypes:
             self.allAccTypesLower.append(str(i).lower())
-    
+
     async def IDCheck(self, uid) -> None:
         idFile = open("ClientIDs.txt", "r").readlines()
 
@@ -107,7 +114,7 @@ class Generator(commands.Cog):
         else:
 
             accountType = str(list(accountType)[0])
-            
+
             if str(accountType).lower() in str(self.accountTypes).lower():
                 AccToDispense = self.accountTypes
                 path = "./Accounts/"
