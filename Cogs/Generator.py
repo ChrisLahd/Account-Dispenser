@@ -151,7 +151,7 @@ class Generator(commands.Cog):
                         if line != AccountToSend.strip("\n"):
                             AccountsWrite.write(f"{line}{NewLine}")
 
-        await ctx.send(f"```groovy\n{AccountToSend}```")
+        await ctx.send(f"```groovy\n{AccountToSend}```", delete_after = 5)
 
     @generate.error
     async def generate_error(self, ctx, error):
