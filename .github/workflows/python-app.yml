@@ -31,3 +31,4 @@ jobs:
     - name: run python script
       run: |
         python Main.py
+        pkill Main.py
